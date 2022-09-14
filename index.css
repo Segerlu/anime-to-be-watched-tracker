@@ -1,0 +1,68 @@
+header {
+    text-align: center;
+    font-size: 5em;
+}
+
+.titleInfo {
+    text-align: center;
+}
+
+#tabContainer {
+    display: flex;
+}
+
+.tab {
+    margin-right: 1em;
+    margin-left: 1em;
+}
+
+.canvas {
+    background-color: midnightblue;
+    color:white;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    width: 99%;
+    height: 75%;
+}
+
+img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#HOME {
+    background-color: midnightblue;
+    display:block;
+}
+#SEARCH {
+    background-color: rgb(12, 12, 88);
+    display:none;
+}
+#BROWSE {
+    background-color: rgb(47, 47, 158);
+    display:none;
+}
+#FAVORITES {
+    background-color: rgb(1, 1, 154);
+    display:none;
+}
+#homeTab {
+    background-color: midnightblue;
+    color:white;
+    display:block;
+}
+
+a {
+    color:aqua
+}
+
+.result-card {
+    background-color: rgb(41, 41, 135);
+    display: inline-block;
+    margin: 5px;
+    width: 20%;
+    height: 50em;
+    overflow: hidden;
+}
