@@ -3,6 +3,11 @@ header {
     font-size: 5em;
 }
 
+body {
+    background-color: black;
+    color:white;
+}
+
 .titleInfo {
     text-align: center;
 }
@@ -49,9 +54,13 @@ img {
     display:none;
 }
 #homeTab {
-    background-color: midnightblue;
+    background-color: blue;
     color:white;
     display:block;
+}
+
+p {
+    font-size: small;
 }
 
 a {
@@ -64,5 +73,11 @@ a {
     margin: 5px;
     width: 20%;
     height: 50em;
-    overflow: hidden;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(51, 51, 204);
+}
+
+.browse-card {
+    height:auto;
 }
