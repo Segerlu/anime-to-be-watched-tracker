@@ -7,6 +7,7 @@ let favoriteScreen = document.getElementById("favoriteScreen");
 let searchWord = document.getElementById("searchBar");
 let searchButton = document.getElementById("searchButton");
 let saveButton = document.getElementById("saveFav");
+let note = document.getElementById("note");
 let topAnime = "https://api.jikan.moe/v4/top/anime";
 let apiURL = "https://api.jikan.moe/v4/anime?q=";
 let genreURL = "https://api.jikan.moe/v4/anime?genres=";
@@ -19,6 +20,7 @@ for (let i = 0; i < tabs.length; i++) {
     tabs[i].addEventListener("click", tabClick);
 }
 loadHome();
+
 getGenreList();
 
 
@@ -109,12 +111,16 @@ document.body.addEventListener("mouseleave", function (e) {
 
 //Saves the current favorites list to local storage using the username as key
 saveButton.addEventListener("click", function () {
+if(username) {
 
     if (favorites) {
         localStorage.setItem(username, JSON.stringify(Object.keys(favorites).join(",")))
     } else {
         localStorage.removeItem(username);
     }
+}else {
+    alert("Please log in to save your favorites.");
+}
 });
 
 //Pulls the information from the favorites list object and populates the favorites screen whith the selected anime
@@ -192,7 +198,7 @@ async function loadHome() {
     let response = await fetch(topAnime);
     let data = await response.json();
 
-    for (let i = 0; i < data.data.length; i++) {
+    for (let i = 0; i < data.data.length-1; i++) {
 
         createResultCard(data.data[i], homeScreen)
 
@@ -249,7 +255,6 @@ function createResultCard(data, parent) {
     linkA.href = data.url;
     linkA.textContent = "View Show";
 
-
     link.appendChild(linkA);
     cardSummary.appendChild(summary);
     cardSummary.appendChild(p);
@@ -276,12 +281,14 @@ function createBrowseCard(data, parent) {
 function tabClick(tab) {
 
     resetTabs(tab);
+    note.textContent = "Click on any show to add it to your favorites!";
     if (tab.target.id === "searchTab") {
         searchForAnime(apiURL);
     } else if (tab.target.id === "browseTab") {
         getGenreList();
     } else if (tab.target.id === "favoritesTab") {
         populateFavorites();
+        note.textContent = "Click on any show to remove it from your favorites!";
     }
 
     if (tab.target.id === "login") {
@@ -289,11 +296,14 @@ function tabClick(tab) {
         if (username) {
             tab.target.textContent = "Welcome " + username + "!";
             let user = localStorage.getItem(username);
-            user = user.replace(/"/g, "");
-            let arrUser = user.split(",");
-            favorites = {};
-            for (let i = 0; i < arrUser.length; i++) {
-                favorites[arrUser[i]] = true;
+            if (user){
+
+                user = user.replace(/"/g, "");
+                let arrUser = user.split(",");
+                favorites = {};
+                for (let i = 0; i < arrUser.length; i++) {
+                    favorites[arrUser[i]] = true;
+                }
             }
         } else {
             username = "";
