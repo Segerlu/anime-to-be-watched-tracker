@@ -6,11 +6,14 @@ let browseScreen = document.getElementById("browseResults");
 let favoriteScreen = document.getElementById("favoriteScreen");
 let searchWord = document.getElementById("searchBar");
 let searchButton = document.getElementById("searchButton");
+let saveButton = document.getElementById("saveFav");
 let topAnime = "https://api.jikan.moe/v4/top/anime";
 let apiURL = "https://api.jikan.moe/v4/anime?q=";
 let genreURL = "https://api.jikan.moe/v4/anime?genres=";
 let genFav = "https://api.jikan.moe/v4/anime/"
 let favorites = {};
+let username;
+let path = "/Saved_Favorites/";
 
 for (let i = 0; i < tabs.length; i++) {
     tabs[i].addEventListener("click", tabClick);
@@ -30,7 +33,7 @@ searchButton.addEventListener("click", function () {
     searchForAnime(apiURL + searchWord.value);
 });
 
-browseScreen.addEventListener("click", function(e) {
+browseScreen.addEventListener("click", function (e) {
 
     if (e.target.className === "browse-title" || e.target.className === "browse-card") {
 
@@ -42,29 +45,94 @@ document.addEventListener("click", function (e) {
 
     if (e.target.parentNode.className === "result-card") {
 
+        
+        if (e.target.parentNode.parentNode.id === "favoriteScreen") {
+            delete favorites[e.target.parentNode.id];
+            populateFavorites();
+        } else {
+
+            if (favorites[e.target.parentNode.id]) {
+                alert("This title is already favorited!")
+            } else {
+
+                favorites[e.target.parentNode.id] = true;
+
+                e.target.parentNode.style.backgroundColor = "green";
+
+                setTimeout(function () {
+                    e.target.parentNode.style.backgroundColor = "rgb(41, 41, 135)";
+                }, 1000);
+            }
+        }
+    } else if (e.target.className === "result-card") {
+
+        if (e.target.parentNode.id === "favoriteScreen") {
+            delete favorites[e.target.parentNode.id];
+            populateFavorites();
+        } else {
+
         if (favorites[e.target.parentNode.id]) {
             alert("This title is already favorited!")
         } else {
 
-            favorites[e.target.parentNode.id] = true;
-            const title = e.target.parentNode.firstChild.textContent;
-            alert(title + " added to your favorites!");
+            favorites[e.target.id] = true;
+
+            e.target.style.backgroundColor = "green";
+
+            setTimeout(function () {
+                e.target.style.backgroundColor = "rgb(41, 41, 135)";
+            }, 1000);
+        }
         }
     }
-}); 
+
+});
+
+document.body.addEventListener("mouseenter", function (e) {
+    if (e.target.parentNode.className === "result-card") {
+        console.log(e.target.parentNode.lastChild.style.display)
+        e.target.parentNode.lastChild.style.display = "block";
+    }
+});
+
+document.body.addEventListener("mouseleave", function (e) {
+    if (e.target.parentNode.className === "result-card") {
+
+        e.target.parentNode.lastChild.style.display = "none";
+    }
+});
+
+saveButton.addEventListener("click", function () {
+
+    if (favorites) {
+        localStorage.setItem(username, JSON.stringify(Object.keys(favorites).join(",")))
+    } else {
+        localStorage.removeItem(username);
+    }
+
+    
+
+});
 
 async function populateFavorites() {
     deleteAllChildNodes(favoriteScreen);
-    
+
     let arrFavorites = Object.keys(favorites);
-    for (let i = 0; i < arrFavorites.length; i++) {
 
-        let response = await fetch(genFav + arrFavorites[i]);
-        let data = await response.json();
+    const results = arrFavorites.filter(element => {
+        return element !== '';
+      });
 
-        console.log( data)
-        
-        createResultCard(data.data, favoriteScreen);
+    if (results.length) {
+        for (let i = 0; i < results.length; i++) {
+
+            let response = await fetch(genFav + results[i]);
+            let data = await response.json();
+
+            createResultCard(data.data, favoriteScreen);
+        }
+    } else {
+        favoriteScreen.append("No saved favorites!")
     }
 }
 
@@ -158,9 +226,11 @@ function createResultCard(data, parent) {
     cardSummary.classList.add("card-summary");
 
     let summary = document.createElement("em");
+    summary.classList.add("summary");
     summary.textContent = "Summary:";
 
     let p = document.createElement("p");
+    p.classList.add("summary");
     p.textContent = data.synopsis;
 
     let link = document.createElement("div");
@@ -173,7 +243,7 @@ function createResultCard(data, parent) {
     link.appendChild(linkA);
     cardSummary.appendChild(summary);
     cardSummary.appendChild(p);
-    resultsCard.append(cardTitle, image, cardGenres, cardSummary, link);
+    resultsCard.append(cardTitle, image, cardGenres, link, cardSummary);
     parent.appendChild(resultsCard);
 }
 
@@ -202,8 +272,26 @@ function tabClick(tab) {
         populateFavorites();
     }
 
-    tab.target.style.color = "white";
-    tab.target.style.backgroundColor = "blue";
+    if (tab.target.id === "login") {
+        username = prompt("Please enter your username:", "Anonymous");
+        if (username) {
+            tab.target.textContent = "Welcome " + username + "!";
+            let user = localStorage.getItem(username);
+            user = user.replace(/"/g, "");
+            let arrUser = user.split(",");
+            favorites = {};
+            for (let i = 0; i < arrUser.length; i++) {
+                favorites[arrUser[i]] = true;
+            }
+        } else {
+            username = "";
+            alert("You cannot enter a blank username!");
+        }
+    } else {
+
+        tab.target.style.color = "white";
+        tab.target.style.backgroundColor = "blue";
+    }
 
 }
 
@@ -211,12 +299,15 @@ function resetTabs(tab) {
 
     var canvas = document.getElementById(tab.target.textContent);
 
-    switchCanvas(canvas);
+    if (tab.target.id === "login") {
+    } else {
+        switchCanvas(canvas);
 
-    for (let i = 0; i < tabs.length; i++) {
+        for (let i = 0; i < tabs.length; i++) {
 
-        tabs[i].style.color = "white";
-        tabs[i].style.backgroundColor = "black";
+            tabs[i].style.color = "white";
+            tabs[i].style.backgroundColor = "black";
+        }
     }
 }
 
