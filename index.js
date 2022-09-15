@@ -308,6 +308,7 @@ function tabClick(tab) {
                     favorites[arrUser[i]] = true;
                 }
             }
+            populateFavorites();
         } else {
             username = "";
             alert("You cannot enter a blank username!");
