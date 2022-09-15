@@ -22,17 +22,19 @@ loadHome();
 getGenreList();
 
 
-
+//Searches for results when the enter key is pressed while input is in focus
 searchWord.addEventListener('keypress', function (event) {
     if (event.key === "Enter") {
         searchForAnime(apiURL + searchWord.value);
     }
 });
 
+//Searches for results when the search button is pressed
 searchButton.addEventListener("click", function () {
     searchForAnime(apiURL + searchWord.value);
 });
 
+//Populates the browse tab based off the genre selected by the user
 browseScreen.addEventListener("click", function (e) {
 
     if (e.target.className === "browse-title" || e.target.className === "browse-card") {
@@ -41,6 +43,7 @@ browseScreen.addEventListener("click", function (e) {
     }
 });
 
+//Adds or removes anime from the favorite list
 document.addEventListener("click", function (e) {
 
     if (e.target.parentNode.className === "result-card") {
@@ -71,7 +74,7 @@ document.addEventListener("click", function (e) {
             populateFavorites();
         } else {
 
-        if (favorites[e.target.parentNode.id]) {
+        if (favorites[e.target.id]) {
             alert("This title is already favorited!")
         } else {
 
@@ -88,6 +91,7 @@ document.addEventListener("click", function (e) {
 
 });
 
+//Reveals the summary when you move the mouse over the result card
 document.body.addEventListener("mouseenter", function (e) {
     if (e.target.parentNode.className === "result-card") {
         console.log(e.target.parentNode.lastChild.style.display)
@@ -95,6 +99,7 @@ document.body.addEventListener("mouseenter", function (e) {
     }
 });
 
+//Hides the summary when your mouse leaves the result card
 document.body.addEventListener("mouseleave", function (e) {
     if (e.target.parentNode.className === "result-card") {
 
@@ -102,6 +107,7 @@ document.body.addEventListener("mouseleave", function (e) {
     }
 });
 
+//Saves the current favorites list to local storage using the username as key
 saveButton.addEventListener("click", function () {
 
     if (favorites) {
@@ -109,11 +115,9 @@ saveButton.addEventListener("click", function () {
     } else {
         localStorage.removeItem(username);
     }
-
-    
-
 });
 
+//Pulls the information from the favorites list object and populates the favorites screen whith the selected anime
 async function populateFavorites() {
     deleteAllChildNodes(favoriteScreen);
 
@@ -136,6 +140,7 @@ async function populateFavorites() {
     }
 }
 
+//Pulls the list of anime that corresponds to the selected genre
 async function populateBrowse(genre) {
 
     deleteAllChildNodes(browseScreen);
@@ -148,6 +153,7 @@ async function populateBrowse(genre) {
     }
 }
 
+//Pulls the list of genres from the API to populate the genre selection in the browse tab
 async function getGenreList() {
 
     deleteAllChildNodes(browseScreen);
@@ -160,6 +166,7 @@ async function getGenreList() {
     }
 }
 
+//Populates the search tab with the results pulled from API using the word in the input box as a parameter
 async function searchForAnime(query) {
 
     deleteAllChildNodes(searchScreen);
@@ -179,6 +186,7 @@ async function searchForAnime(query) {
     return data;
 }
 
+//Loads the home tab with the top 25 anime according to MyAnimeList.com
 async function loadHome() {
 
     let response = await fetch(topAnime);
@@ -193,12 +201,14 @@ async function loadHome() {
     return data;
 }
 
+//Deletes all the child nodes of the element passed through as a parameter
 function deleteAllChildNodes(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
 }
 
+//Creates a card with the information passed through in the data and appends the result to the element passed as parent
 function createResultCard(data, parent) {
     let genresAr = [];
 
@@ -247,6 +257,7 @@ function createResultCard(data, parent) {
     parent.appendChild(resultsCard);
 }
 
+//Creates a card that displays the genre passed through and appends it to the parent
 function createBrowseCard(data, parent) {
 
     let browseCard = document.createElement("span");
@@ -261,6 +272,7 @@ function createBrowseCard(data, parent) {
     parent.appendChild(browseCard);
 }
 
+//Handles the transition between the tabs
 function tabClick(tab) {
 
     resetTabs(tab);
@@ -295,6 +307,7 @@ function tabClick(tab) {
 
 }
 
+//Resets all the tab styles
 function resetTabs(tab) {
 
     var canvas = document.getElementById(tab.target.textContent);
@@ -311,6 +324,7 @@ function resetTabs(tab) {
     }
 }
 
+//Handles the canvas switch based on the tab selected
 function switchCanvas(canvas) {
 
     let allCanvases = document.getElementsByClassName("canvas");
