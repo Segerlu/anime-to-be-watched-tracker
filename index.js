@@ -296,7 +296,8 @@ function tabClick(tab) {
     if (tab.target.id === "login") {
         username = prompt("Please enter your username:", "Anonymous");
         if (username) {
-            tab.target.textContent = "Welcome " + username + "!";
+            username = username.toUpperCase();
+            tab.target.textContent = username;
             let user = localStorage.getItem(username);
             if (user){
 
