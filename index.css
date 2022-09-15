@@ -19,6 +19,7 @@ body {
 .tab {
     margin-right: 1em;
     margin-left: 1em;
+    cursor:pointer;
 }
 
 .canvas {
@@ -60,7 +61,8 @@ img {
 }
 
 p {
-    font-size: small;
+    font-size: medium;
+    display: none;
 }
 
 a {
@@ -68,16 +70,23 @@ a {
 }
 
 .result-card {
+    cursor:pointer;
     background-color: rgb(41, 41, 135);
     display: inline-block;
     margin: 5px;
     width: 20%;
-    height: 50em;
+    height: 40em;
     overflow: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgb(51, 51, 204);
 }
 
 .browse-card {
     height:auto;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(51, 51, 204);
+    cursor:pointer;
+    background-color: rgb(41, 41, 135);
+    display: inline-block;
+    margin: 5px;
+    width: 20%;
 }

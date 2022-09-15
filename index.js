@@ -3,12 +3,14 @@ let tabs = tabContainer.children;
 let homeScreen = document.getElementById("topAnime");
 let searchScreen = document.getElementById("searchResults");
 let browseScreen = document.getElementById("browseResults");
+let favoriteScreen = document.getElementById("favoriteScreen");
 let searchWord = document.getElementById("searchBar");
 let searchButton = document.getElementById("searchButton");
 let topAnime = "https://api.jikan.moe/v4/top/anime";
 let apiURL = "https://api.jikan.moe/v4/anime?q=";
 let genreURL = "https://api.jikan.moe/v4/anime?genres=";
-let favorites = [];
+let genFav = "https://api.jikan.moe/v4/anime/"
+let favorites = {};
 
 for (let i = 0; i < tabs.length; i++) {
     tabs[i].addEventListener("click", tabClick);
@@ -36,6 +38,36 @@ browseScreen.addEventListener("click", function(e) {
     }
 });
 
+document.addEventListener("click", function (e) {
+
+    if (e.target.parentNode.className === "result-card") {
+
+        if (favorites[e.target.parentNode.id]) {
+            alert("This title is already favorited!")
+        } else {
+
+            favorites[e.target.parentNode.id] = true;
+            const title = e.target.parentNode.firstChild.textContent;
+            alert(title + " added to your favorites!");
+        }
+    }
+}); 
+
+async function populateFavorites() {
+    deleteAllChildNodes(favoriteScreen);
+    
+    let arrFavorites = Object.keys(favorites);
+    for (let i = 0; i < arrFavorites.length; i++) {
+
+        let response = await fetch(genFav + arrFavorites[i]);
+        let data = await response.json();
+
+        console.log( data)
+        
+        createResultCard(data.data, favoriteScreen);
+    }
+}
+
 async function populateBrowse(genre) {
 
     deleteAllChildNodes(browseScreen);
@@ -43,7 +75,6 @@ async function populateBrowse(genre) {
     let response = await fetch(genre);
     let data = await response.json();
 
-    console.log(genre, data)
     for (let i = 0; i < data.data.length; i++) {
         createResultCard(data.data[i], browseScreen);
     }
@@ -109,6 +140,7 @@ function createResultCard(data, parent) {
 
     let resultsCard = document.createElement("span");
     resultsCard.classList.add("result-card");
+    resultsCard.id = data.mal_id;
 
     let cardTitle = document.createElement("h1");
     cardTitle.classList.add("card-title");
@@ -149,7 +181,6 @@ function createBrowseCard(data, parent) {
 
     let browseCard = document.createElement("span");
     browseCard.classList.add("browse-card");
-    browseCard.classList.add("result-card");
     browseCard.id = data.mal_id;
 
     let cardTitle = document.createElement("h1");
@@ -167,6 +198,8 @@ function tabClick(tab) {
         searchForAnime(apiURL);
     } else if (tab.target.id === "browseTab") {
         getGenreList();
+    } else if (tab.target.id === "favoritesTab") {
+        populateFavorites();
     }
 
     tab.target.style.color = "white";
