@@ -135,7 +135,7 @@ async function populateFavorites() {
       });
 
     if (results.length) {
-        for (let i = 0; i < results.length-1; i++) {
+        for (let i = 0; i < results.length; i++) {
 
             let response = await fetch(genFav + results[i]);
             let data = await response.json();

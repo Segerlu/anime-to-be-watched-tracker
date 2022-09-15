@@ -70,6 +70,7 @@ img {
 .summary {
     font-size: medium;
     display: none;
+    padding: 1em;
 }
 
 a {
@@ -90,6 +91,10 @@ a {
     overflow: auto;
     transition: background-color .5s cubic-bezier(1,1,1,1);
     transition-delay: 0s;
+}
+
+.card-title {
+    padding: .5em;
 }
 
 .result-card:hover .summary {
