@@ -8,6 +8,7 @@ let searchWord = document.getElementById("searchBar");
 let searchButton = document.getElementById("searchButton");
 let saveButton = document.getElementById("saveFav");
 let note = document.getElementById("note");
+
 let topAnime = "https://api.jikan.moe/v4/top/anime";
 let apiURL = "https://api.jikan.moe/v4/anime?q=";
 let genreURL = "https://api.jikan.moe/v4/anime?genres=";
@@ -134,7 +135,7 @@ async function populateFavorites() {
       });
 
     if (results.length) {
-        for (let i = 0; i < results.length; i++) {
+        for (let i = 0; i < results.length-1; i++) {
 
             let response = await fetch(genFav + results[i]);
             let data = await response.json();
@@ -154,7 +155,7 @@ async function populateBrowse(genre) {
     let response = await fetch(genre);
     let data = await response.json();
 
-    for (let i = 0; i < data.data.length; i++) {
+    for (let i = 0; i < data.data.length-1; i++) {
         createResultCard(data.data[i], browseScreen);
     }
 }
@@ -250,6 +251,7 @@ function createResultCard(data, parent) {
     p.textContent = data.synopsis;
 
     let link = document.createElement("div");
+    link.classList.add("linkDiv");
 
     let linkA = document.createElement("a");
     linkA.href = data.url;
@@ -329,7 +331,7 @@ function resetTabs(tab) {
         for (let i = 0; i < tabs.length; i++) {
 
             tabs[i].style.color = "white";
-            tabs[i].style.backgroundColor = "black";
+            tabs[i].style.backgroundColor = "midnightblue";
         }
     }
 }

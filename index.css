@@ -1,34 +1,45 @@
 header {
+    background-color: midnightblue;
     text-align: center;
     font-size: 5em;
 }
 
 body {
-    background-color: black;
+    background-image: url(background.jpg);
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-attachment: fixed;
     color:white;
+}
+
+h1 {
+    padding-top: .5em;
 }
 
 .titleInfo {
     text-align: center;
+    background-color: midnightblue;
 }
 
 #tabContainer {
+    background-color: midnightblue;
     display: flex;
 }
 
 .tab {
+    padding: .5em;
     margin-right: 1em;
     margin-left: 1em;
     cursor:pointer;
 }
 
 .canvas {
-    background-color: midnightblue;
+    background-color: rgba(25, 25, 112, 0.499);
     color:white;
     text-align: center;
     display: block;
     margin: 0 auto;
-    width: 99%;
+    width: 80%;
     height: 75%;
 }
 
@@ -39,19 +50,15 @@ img {
 }
 
 #HOME {
-    background-color: midnightblue;
     display:block;
 }
 #SEARCH {
-    background-color: rgb(12, 12, 88);
     display:none;
 }
 #BROWSE {
-    background-color: rgb(47, 47, 158);
     display:none;
 }
 #FAVORITES {
-    background-color: rgb(1, 1, 154);
     display:none;
 }
 #homeTab {
@@ -66,7 +73,11 @@ img {
 }
 
 a {
-    color:aqua
+    color:aqua;
+}
+
+.linkDiv {
+    padding-bottom: 1em;
 }
 
 .result-card {
@@ -84,6 +95,11 @@ a {
 .result-card:hover .summary {
     
     display:block;
+}
+
+.tab:hover {
+    font-weight: bold;
+    color:green;
 }
 
 .browse-card {
